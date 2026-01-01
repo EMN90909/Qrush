@@ -35,7 +35,7 @@ const PlanBadge: React.FC<{ plan: Plan }> = ({ plan }) => {
   }
 
   return (
-    <span className={\`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium \${colorClass}\`}>
+    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${colorClass}`}>
       <Icon className="w-4 h-4 mr-1" />
       {text}
     </span>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import QRCode from 'qrcode.react';
+import { QRCode } from 'qrcode.react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -39,7 +39,7 @@ const QRCodeGenerator: React.FC = () => {
   
   // Mocking the short URL for dynamic QR codes
   const qrValue = qrType === 'dynamic' 
-    ? \`https://dyad.sh/r/\${user?.id || 'guest'}/qr-id-123\` 
+    ? `https://dyad.sh/r/${user?.id || 'guest'}/qr-id-123` 
     : inputValue;
 
   const handleDownload = (format: 'png' | 'svg') => {
@@ -64,16 +64,16 @@ const QRCodeGenerator: React.FC = () => {
       showError('SVG download is not fully implemented in this mock component.');
       return;
     }
-    showSuccess(\`QR Code downloaded as \${format.toUpperCase()}!\`);
+    showSuccess(`QR Code downloaded as ${format.toUpperCase()}!`);
   };
 
   const handleGenerate = () => {
     // In a real app, this would trigger a backend call to save the dynamic QR metadata.
     if (qrType === 'dynamic' && plan === 'free' && user && user.dynamicQRCodes >= limits.maxDynamicQRs) {
-      showError(\`You have reached your limit of \${limits.maxDynamicQRs} dynamic QR codes on the Free Plan. Please upgrade.\`);
+      showError(`You have reached your limit of ${limits.maxDynamicQRs} dynamic QR codes on the Free Plan. Please upgrade.`);
       return;
     }
-    showSuccess(\`QR Code generated for: \${inputValue}\`);
+    showSuccess(`QR Code generated for: ${inputValue}`);
   };
 
   return (
