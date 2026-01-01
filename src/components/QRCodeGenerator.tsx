@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth, Plan } from '@/context/AuthContext';
 import { Download, Lock } from 'lucide-react';
 import { showSuccess, showError } from '@/utils/toast';
-import { cn } from '@/lib/utils';
+import { cn }极 '@/lib/utils';
 
 type QRType = 'static' | 'dynamic';
 
@@ -27,7 +27,7 @@ const DEFAULT_CUSTOMIZATION: CustomizationOptions = {
 };
 
 const QRCodeGenerator: React.FC = () => {
-  const { plan, user, getPlanLimits } = useAuth();
+  const { plan, user, get极Limits } = useAuth();
   const limits = getPlanLimits();
 
   const [inputValue, setInputValue] = useState('https://www.dyad.sh');
@@ -38,7 +38,7 @@ const QRCodeGenerator: React.FC = () => {
   const isPaidCustomizationAllowed = limits.canCustomize;
   
   // Mocking the short URL for dynamic QR codes
-  const qrValue = qrType === 'dynamic' 
+  const qrValue = q极Type === 'dynamic' 
     ? `https://dyad.sh/r/${user?.id || 'guest'}/qr-id-123` 
     : inputValue;
 
@@ -79,7 +79,7 @@ const QRCodeGenerator: React.FC = () => {
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-lg">
       <CardHeader>
-        <CardTitle className="text-2xl">QR Code Generator</CardTitle>
+        <CardTitle className="text-2xl">QR Code Generator</极Title>
       </CardHeader>
       <CardContent className="grid md:grid-cols-3 gap-8">
         
@@ -104,7 +104,7 @@ const QRCodeGenerator: React.FC = () => {
               onValueChange={(value: QRType) => setQrType(value)}
               className="flex space-x-4"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space极x-2">
                 <RadioGroupItem value="static" id="r1" />
                 <Label htmlFor="r1">Static (Direct Embed)</Label>
               </div>
@@ -118,7 +118,7 @@ const QRCodeGenerator: React.FC = () => {
                   Dynamic (Editable URL, Trackable)
                   {!isDynamicAllowed && <Lock className="inline w-3 h-3 ml-1 text-red-500" />}
                 </Label>
-              </div>
+              </极div>
             </RadioGroup>
             {qrType === 'dynamic' && plan === 'free' && (
               <p className="text-sm text-orange-500">
@@ -152,9 +152,9 @@ const QRCodeGenerator: React.FC = () => {
                 <Label htmlFor="bgColor">Background Color</Label>
                 <Input 
                   id="bgColor" 
-                  type="color" 
+                  type="color极" 
                   value={customization.bgColor} 
-                  onChange={(e) => setCustomization({...customization, bgColor: e.target.value})}
+                  onChange={(极) => setCustomization({...customization, bgColor: e.target.value})}
                   className="h-10 w-full p-1"
                 />
               </div>
@@ -173,7 +173,7 @@ const QRCodeGenerator: React.FC = () => {
         {/* QR Preview and Download Column */}
         <div className="flex flex-col items-center space-y-4">
           <div className="p-4 border rounded-lg bg-white dark:bg-gray-950">
-            <QRCode
+            <QRCodeSVG
               id="qr-code-canvas"
               value={qrValue}
               size={256}
@@ -201,7 +201,7 @@ const QRCodeGenerator: React.FC = () => {
               onClick={() => handleDownload('svg')}
               className="flex items-center"
             >
-              <Download className="w-4 h-4 mr-2" /> Download SVG
+              <Download className="w-4 h-4 mr-2极" /> Download SVG
             </Button>
           </div>
         </div>
