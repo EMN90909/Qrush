@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth, Plan } from '@/context/AuthContext';
-import { LogIn, LogOut, Crown, User } from 'lucide-react';
+import { LogIn, LogOut, Crown, User, LayoutDashboard, QrCode } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from 'react-router-dom';
 
 const PlanBadge: React.FC<{ plan: Plan }> = ({ plan }) => {
   let colorClass = '';
@@ -44,6 +45,7 @@ const PlanBadge: React.FC<{ plan: Plan }> = ({ plan }) => {
 
 const Header: React.FC = () => {
   const { user, plan, signIn, signOut, loading } = useAuth();
+  const navigate = useNavigate();
 
   if (loading) {
     return null; // Or a loading spinner
@@ -52,7 +54,7 @@ const Header: React.FC = () => {
   return (
     <header className="border-b bg-background sticky top-0 z-10 shadow-sm">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <h1 className="text-3xl font-extrabold text-primary">qrush</h1>
+        <h1 className="text-3xl font-extrabold text-primary cursor-pointer" onClick={() => navigate('/')}>qrush</h1>
         
         <div className="flex items-center space-x-4">
           {user && <PlanBadge plan={plan} />}
@@ -70,6 +72,13 @@ const Header: React.FC = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/studio')}>
+                  <QrCode className="w-4 h-4 mr-2" /> QR Studio
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                  <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut}>
                   <LogOut className="w-4 h-4 mr-2" /> Sign Out

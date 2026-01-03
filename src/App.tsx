@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; // Import the new Login page
+import Login from "./pages/Login";
+import QRStudio from "./pages/QRStudio";
+import Dashboard from "./pages/Dashboard"; // Import the new Dashboard page
 import { AuthProvider } from "./context/AuthContext";
 import { useEffect } from "react";
 import { supabase } from "./integrations/supabase/client";
@@ -54,7 +56,9 @@ const App = () => (
           <AuthWrapper>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} /> {/* Add the login route */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/studio" element={<QRStudio />} />
+              <Route path="/dashboard" element={<Dashboard />} /> {/* Add the Dashboard route */}
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

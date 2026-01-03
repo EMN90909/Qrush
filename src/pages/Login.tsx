@@ -17,8 +17,14 @@ const Login: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md mx-auto shadow-lg rounded-xl border-none">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Background QR Code Pattern */}
+      <div className="absolute inset-0 z-0 opacity-5 dark:opacity-10">
+        <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-repeat bg-size-[50px] animate-pulse-slow"></div>
+      </div>
+      {/* You might need to define `animate-pulse-slow` in your global.css or tailwind.config.ts */}
+
+      <Card className="w-full max-w-md mx-auto shadow-lg rounded-xl border-none z-10 relative">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-3xl font-bold text-foreground">Welcome to qrush</CardTitle>
           <p className="text-muted-foreground mt-2">Sign in or create an account to continue</p>
