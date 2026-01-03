@@ -1,19 +1,26 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { supabase } from '../integrations/supabase/client';
+import { Session, User as SupabaseUser } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
+import { showSuccess, showError } from '@/utils/toast';
 
 export type Plan = 'guest' | 'free' | 'paid';
 
-interface User {
+interface UserProfile {
   id: string;
   email: string;
   plan: Plan;
   dynamicQRCodes: number; // Current count of dynamic QRs
   storageUsedMB: number; // Current storage usage
+  // Add other profile fields as needed
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: UserProfile | null;
   plan: Plan;
-  signIn: (plan: Plan) => void;
+  session: Session | null;
+  loading: boolean;
+  signIn: () => void; // No longer takes a plan, redirects to login
   signOut: () => void;
   getPlanLimits: () => {
     maxDynamicQRs: number;
@@ -32,33 +39,12 @@ const defaultLimits = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const GUEST_USER: User = {
-  id: 'guest',
-  email: 'guest@example.com',
-  plan: 'guest',
-  dynamicQRCodes: 0,
-  storageUsedMB: 0,
-};
-
-const FREE_USER: User = {
-  id: 'user-123',
-  email: 'freeuser@example.com',
-  plan: 'free',
-  dynamicQRCodes: 1, // Mocking 1 dynamic QR already created
-  storageUsedMB: 10,
-};
-
-const PAID_USER: User = {
-  id: 'user-456',
-  email: 'paiduser@example.com',
-  plan: 'paid',
-  dynamicQRCodes: 5,
-  storageUsedMB: 50,
-};
-
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(GUEST_USER);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   const plan = user?.plan || 'guest';
 
   const getPlanLimits = () => {
@@ -83,20 +69,95 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const signIn = (targetPlan: Plan) => {
-    if (targetPlan === 'free') {
-      setUser(FREE_USER);
-    } else if (targetPlan === 'paid') {
-      setUser(PAID_USER);
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      setSession(currentSession);
+      setLoading(true);
+      if (currentSession) {
+        // Fetch user profile from public.profiles table
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('id, email, user_type, dynamicQRCodes, storageUsedMB') // Assuming these columns exist or will be added
+          .eq('id', currentSession.user.id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching profile:', error);
+          showError('Failed to load user profile.');
+          setUser({
+            id: currentSession.user.id,
+            email: currentSession.user.email || 'unknown@example.com',
+            plan: 'guest', // Default to guest if profile fetch fails
+            dynamicQRCodes: 0,
+            storageUsedMB: 0,
+          });
+        } else if (profile) {
+          setUser({
+            id: profile.id,
+            email: profile.email || currentSession.user.email || 'unknown@example.com',
+            plan: (profile.user_type as Plan) || 'guest', // Map user_type to plan
+            dynamicQRCodes: profile.dynamicQRCodes || 0,
+            storageUsedMB: profile.storageUsedMB || 0,
+          });
+        } else {
+          // If no profile found, create a basic one or default to guest
+          setUser({
+            id: currentSession.user.id,
+            email: currentSession.user.email || 'unknown@example.com',
+            plan: 'guest',
+            dynamicQRCodes: 0,
+            storageUsedMB: 0,
+          });
+        }
+        if (location.pathname === '/login') {
+          navigate('/');
+        }
+      } else {
+        setUser(null);
+        if (location.pathname !== '/login') {
+          navigate('/login');
+        }
+      }
+      setLoading(false);
+    });
+
+    // Initial session check
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      setSession(initialSession);
+      if (!initialSession) {
+        setUser(null);
+        if (location.pathname !== '/login') {
+          navigate('/login');
+        }
+        setLoading(false);
+      }
+      // The onAuthStateChange listener will handle setting the user if initialSession exists
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [navigate]);
+
+  const signIn = () => {
+    navigate('/login');
+  };
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      showError('Failed to sign out.');
+      console.error('Error signing out:', error);
+    } else {
+      showSuccess('Signed out successfully!');
+      setUser(null);
+      setSession(null);
+      navigate('/login');
     }
   };
 
-  const signOut = () => {
-    setUser(GUEST_USER);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, plan, signIn, signOut, getPlanLimits }}>
+    <AuthContext.Provider value={{ user, plan, session, loading, signIn, signOut, getPlanLimits }}>
       {children}
     </AuthContext.Provider>
   );

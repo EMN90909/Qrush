@@ -43,7 +43,11 @@ const PlanBadge: React.FC<{ plan: Plan }> = ({ plan }) => {
 };
 
 const Header: React.FC = () => {
-  const { user, plan, signIn, signOut } = useAuth();
+  const { user, plan, signIn, signOut, loading } = useAuth();
+
+  if (loading) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <header className="border-b bg-background sticky top-0 z-10 shadow-sm">
@@ -51,30 +55,27 @@ const Header: React.FC = () => {
         <h1 className="text-3xl font-extrabold text-primary">qrush</h1>
         
         <div className="flex items-center space-x-4">
-          <PlanBadge plan={plan} />
+          {user && <PlanBadge plan={plan} />}
 
-          {plan === 'guest' ? (
+          {!user ? (
+            <Button variant="default" onClick={signIn} className="flex items-center bg-primary text-primary-foreground hover:bg-primary/90">
+              <LogIn className="w-4 h-4 mr-2" /> Sign In / Up
+            </Button>
+          ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="default" className="flex items-center bg-primary text-primary-foreground hover:bg-primary/90">
-                  <LogIn className="w-4 h-4 mr-2" /> Sign In / Up
+                <Button variant="outline" className="flex items-center border-input bg-background hover:bg-accent hover:text-accent-foreground">
+                  <User className="w-4 h-4 mr-2" /> {user.email}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Simulate Sign In</DropdownMenuLabel>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signIn('free')}>
-                  Sign In (Free Plan)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => signIn('paid')}>
-                  Sign In (Paid Plan)
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="w-4 h-4 mr-2" /> Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <Button variant="outline" onClick={signOut} className="flex items-center border-input bg-background hover:bg-accent hover:text-accent-foreground">
-              <LogOut className="w-4 h-4 mr-2" /> Sign Out
-            </Button>
           )}
         </div>
       </div>
