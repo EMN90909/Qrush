@@ -7,44 +7,11 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import QRStudio from "./pages/QRStudio";
-import Dashboard from "./pages/Dashboard"; // Import the new Dashboard page
+import Dashboard from "./pages/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
-import { useEffect } from "react";
-import { supabase } from "./integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the new ProtectedRoute component
 
 const queryClient = new QueryClient();
-
-// Component to handle redirects based on auth state
-const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session && location.pathname !== '/login') {
-        navigate('/login');
-      } else if (session && location.pathname === '/login') {
-        navigate('/');
-      }
-    });
-
-    // Initial check
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session && location.pathname !== '/login') {
-        navigate('/login');
-      } else if (session && location.pathname === '/login') {
-        navigate('/');
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [navigate]);
-
-  return <>{children}</>;
-};
-
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -53,16 +20,29 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AuthWrapper>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/studio" element={<QRStudio />} />
-              <Route path="/dashboard" element={<Dashboard />} /> {/* Add the Dashboard route */}
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthWrapper>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            {/* Protected Routes */}
+            <Route 
+              path="/studio" 
+              element={
+                <ProtectedRoute>
+                  <QRStudio />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
