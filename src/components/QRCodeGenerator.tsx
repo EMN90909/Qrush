@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react'; // Changed from QRCodeSVG to QRCodeCanvas
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -58,10 +58,11 @@ const QRCodeGenerator: React.FC = () => {
       downloadLink.click();
       document.body.removeChild(downloadLink);
     } else if (format === 'svg') {
-      // qrcode.react doesn't directly support SVG download from canvas, 
-      // but we can simulate the SVG generation logic if needed. 
-      // For simplicity, we'll focus on PNG download for now, as SVG generation is complex without a dedicated library helper.
-      showError('SVG download is not fully implemented in this mock component.');
+      // To download as SVG, you would typically need to extract the SVG string
+      // from the DOM element if QRCodeSVG rendered an SVG, or use a library
+      // to convert the canvas to SVG. For now, I'll keep the error message
+      // as the component is configured to render as canvas for PNG download.
+      showError('SVG download is not directly supported when rendering as canvas. Please download as PNG.');
       return;
     }
     showSuccess(`QR Code downloaded as ${format.toUpperCase()}!`);
@@ -175,7 +176,7 @@ const QRCodeGenerator: React.FC = () => {
         {/* QR Preview and Download Column */}
         <div className="flex flex-col items-center space-y-4">
           <div className="p-4 border rounded-lg bg-white dark:bg-gray-950 shadow-md">
-            <QRCodeSVG
+            <QRCodeCanvas
               id="qr-code-canvas"
               value={qrValue}
               size={256}
