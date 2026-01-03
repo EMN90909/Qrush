@@ -77,27 +77,28 @@ const QRCodeGenerator: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-2xl">QR Code Generator</CardTitle>
+    <Card className="w-full max-w-4xl mx-auto shadow-lg rounded-xl border-none">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-2xl font-semibold text-foreground">QR Code Generator</CardTitle>
       </CardHeader>
       <CardContent className="grid md:grid-cols-3 gap-8">
         
         {/* Input and Settings Column */}
         <div className="md:col-span-2 space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="destination-url">Destination URL or Text</Label>
+            <Label htmlFor="destination-url" className="text-foreground">Destination URL or Text</Label>
             <Input
               id="destination-url"
               placeholder="e.g., https://yourwebsite.com"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
+              className="rounded-lg border-input focus-visible:ring-primary"
             />
           </div>
 
           {/* QR Type Selection */}
           <div className="space-y-2">
-            <Label>QR Code Type</Label>
+            <Label className="text-foreground">QR Code Type</Label>
             <RadioGroup
               defaultValue="static"
               value={qrType}
@@ -105,23 +106,24 @@ const QRCodeGenerator: React.FC = () => {
               className="flex space-x-4"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="static" id="r1" />
-                <Label htmlFor="r1">Static (Direct Embed)</Label>
+                <RadioGroupItem value="static" id="r1" className="text-primary focus:ring-primary" />
+                <Label htmlFor="r1" className="text-foreground">Static (Direct Embed)</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem 
                   value="dynamic" 
                   id="r2" 
                   disabled={!isDynamicAllowed}
+                  className="text-primary focus:ring-primary"
                 />
-                <Label htmlFor="r2" className={cn(!isDynamicAllowed && "text-muted-foreground")}>
+                <Label htmlFor="r2" className={cn(!isDynamicAllowed && "text-muted-foreground", "text-foreground")}>
                   Dynamic (Editable URL, Trackable)
-                  {!isDynamicAllowed && <Lock className="inline w-3 h-3 ml-1 text-red-500" />}
+                  {!isDynamicAllowed && <Lock className="inline w-3 h-3 ml-1 text-destructive" />}
                 </Label>
               </div>
             </RadioGroup>
             {qrType === 'dynamic' && plan === 'free' && (
-              <p className="text-sm text-orange-500">
+              <p className="text-sm text-destructive">
                 Free Plan: {user?.dynamicQRCodes || 0} / {limits.maxDynamicQRs} Dynamic QRs used.
               </p>
             )}
@@ -129,50 +131,50 @@ const QRCodeGenerator: React.FC = () => {
 
           {/* Customization Options (Paid Only) */}
           <Card className={cn(
-            "p-4 transition-all",
-            !isPaidCustomizationAllowed && "opacity-50 pointer-events-none bg-gray-50 dark:bg-gray-900"
+            "p-4 transition-all rounded-xl border-none shadow-sm",
+            !isPaidCustomizationAllowed && "opacity-50 pointer-events-none bg-secondary dark:bg-gray-900"
           )}>
-            <CardTitle className="text-lg mb-3 flex items-center">
+            <CardTitle className="text-lg mb-3 flex items-center text-foreground">
               Customization (Paid Plan Only)
-              {!isPaidCustomizationAllowed && <Lock className="inline w-4 h-4 ml-2 text-red-500" />}
+              {!isPaidCustomizationAllowed && <Lock className="inline w-4 h-4 ml-2 text-destructive" />}
             </CardTitle>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="fgColor">Foreground Color</Label>
+                <Label htmlFor="fgColor" className="text-foreground">Foreground Color</Label>
                 <Input 
                   id="fgColor" 
                   type="color" 
                   value={customization.fgColor} 
                   onChange={(e) => setCustomization({...customization, fgColor: e.target.value})}
-                  className="h-10 w-full p-1"
+                  className="h-10 w-full p-1 rounded-lg border-input focus-visible:ring-primary"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bgColor">Background Color</Label>
+                <Label htmlFor="bgColor" className="text-foreground">Background Color</Label>
                 <Input 
                   id="bgColor" 
                   type="color" 
                   value={customization.bgColor} 
                   onChange={(e) => setCustomization({...customization, bgColor: e.target.value})}
-                  className="h-10 w-full p-1"
+                  className="h-10 w-full p-1 rounded-lg border-input focus-visible:ring-primary"
                 />
               </div>
               {/* Add more customization inputs here (Logo, EC Level) */}
             </div>
             {!isPaidCustomizationAllowed && (
-              <p className="text-sm text-center mt-4 text-red-500">Upgrade to the Paid Plan to unlock full customization.</p>
+              <p className="text-sm text-center mt-4 text-destructive">Upgrade to the Paid Plan to unlock full customization.</p>
             )}
           </Card>
 
-          <Button onClick={handleGenerate} className="w-full">
+          <Button onClick={handleGenerate} className="w-full rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
             Generate QR Code
           </Button>
         </div>
 
         {/* QR Preview and Download Column */}
         <div className="flex flex-col items-center space-y-4">
-          <div className="p-4 border rounded-lg bg-white dark:bg-gray-950">
+          <div className="p-4 border rounded-lg bg-white dark:bg-gray-950 shadow-md">
             <QRCodeSVG
               id="qr-code-canvas"
               value={qrValue}
@@ -191,14 +193,14 @@ const QRCodeGenerator: React.FC = () => {
             <Button 
               variant="outline" 
               onClick={() => handleDownload('png')}
-              className="flex items-center"
+              className="flex items-center rounded-lg border-input bg-background hover:bg-accent hover:text-accent-foreground"
             >
               <Download className="w-4 h-4 mr-2" /> Download PNG
             </Button>
             <Button 
               variant="outline" 
               onClick={() => handleDownload('svg')}
-              className="flex items-center"
+              className="flex items-center rounded-lg border-input bg-background hover:bg-accent hover:text-accent-foreground"
             >
               <Download className="w-4 h-4 mr-2" /> Download SVG
             </Button>

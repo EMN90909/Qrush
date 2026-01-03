@@ -46,9 +46,9 @@ const Header: React.FC = () => {
   const { user, plan, signIn, signOut } = useAuth();
 
   return (
-    <header className="border-b bg-background sticky top-0 z-10">
+    <header className="border-b bg-background sticky top-0 z-10 shadow-sm">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <h1 className="text-2xl font-bold text-primary">QR Dyad</h1>
+        <h1 className="text-3xl font-extrabold text-primary">qrush</h1>
         
         <div className="flex items-center space-x-4">
           <PlanBadge plan={plan} />
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
           {plan === 'guest' ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="default" className="flex items-center">
+                <Button variant="default" className="flex items-center bg-primary text-primary-foreground hover:bg-primary/90">
                   <LogIn className="w-4 h-4 mr-2" /> Sign In / Up
                 </Button>
               </DropdownMenuTrigger>
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="outline" onClick={signOut} className="flex items-center">
+            <Button variant="outline" onClick={signOut} className="flex items-center border-input bg-background hover:bg-accent hover:text-accent-foreground">
               <LogOut className="w-4 h-4 mr-2" /> Sign Out
             </Button>
           )}
