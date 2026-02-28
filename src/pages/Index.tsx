@@ -11,7 +11,7 @@ export default function Index() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   
-  const [text, setText] = useState('https://www.dyad.sh');
+  const [text, setText] = useState('https://emtra.top');
   const [color, setColor] = useState('#000000');
   const [size, setSize] = useState(256);
   const [history, setHistory] = useState([]);
