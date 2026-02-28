@@ -17,7 +17,7 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, link, image }) => (
   <Card className="flex flex-col h-full rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-none">
     {image && (
-      <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
+      <div className="relative h-40 w-full overflow-hidden rounded-t-xl bg-muted">
         <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
       </div>
     )}
@@ -40,25 +40,25 @@ const projects = [
     title: "Web Builder",
     description: "Build beautiful websites with ease using our intuitive drag-and-drop interface.",
     link: "https://emn.render.com/1",
-    image: "https://via.placeholder.com/400x200/60A5FA/FFFFFF?text=Web+Builder", // Placeholder image
+    image: "/placeholder.svg",
   },
   {
     title: "File Converter",
     description: "Convert files between various formats quickly and securely online.",
     link: "https://emn.render.com/2",
-    image: "https://via.placeholder.com/400x200/4ADE80/FFFFFF?text=File+Converter", // Placeholder image
+    image: "/placeholder.svg",
   },
   {
     title: "Image Editor",
     description: "Edit your photos with powerful tools and stunning filters.",
-    link: "https://emn.render.com/3", // Example additional project
-    image: "https://via.placeholder.com/400x200/FB7185/FFFFFF?text=Image+Editor", // Placeholder image
+    link: "https://emn.render.com/3",
+    image: "/placeholder.svg",
   },
   {
     title: "Task Manager",
     description: "Organize your tasks and boost your productivity with our smart manager.",
-    link: "https://emn.render.com/4", // Example additional project
-    image: "https://via.placeholder.com/400x200/8B5CF6/FFFFFF?text=Task+Manager", // Placeholder image
+    link: "https://emn.render.com/4",
+    image: "/placeholder.svg",
   },
 ];
 
