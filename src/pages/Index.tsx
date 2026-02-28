@@ -61,12 +61,12 @@ export default function Index() {
       script.onload = () => {
         setLibReady(true);
         // Initial render
-        setTimeout(() => renderQRCode('https://www.dyad.sh', '#000000', 256), 100);
+        setTimeout(() => renderQRCode('https://emtra.top', '#000000', 256), 100);
       };
       document.head.appendChild(script);
     } else if ((window as any).QRCode) {
       setLibReady(true);
-      setTimeout(() => renderQRCode('https://www.dyad.sh', '#000000', 256), 100);
+      setTimeout(() => renderQRCode('https://emtra.top', '#000000', 256), 100);
     }
   }, [renderQRCode]);
 
