@@ -37,15 +37,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, link, ima
 
 const projects = [
   {
-    title: "Web Builder",
-    description: "Build beautiful websites with ease using our intuitive drag-and-drop interface.",
-    link: "https://emn.render.com/1",
+    title: "Learnzac",
+    description: "Learn about STEM for free with learnzac.",
+    link: "https://learnzac.onrender.com",
     image: "/placeholder.svg",
   },
   {
-    title: "File Converter",
-    description: "Convert files between various formats quickly and securely online.",
-    link: "https://emn.render.com/2",
+    title: "Emn-hub",
+    description: "Get whatever you need in one app.",
+    link: "https://emn-hub.onrender.com",
     image: "/placeholder.svg",
   },
   {
