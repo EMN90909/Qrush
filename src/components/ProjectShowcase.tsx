@@ -40,25 +40,25 @@ const projects = [
     title: "Learnzac",
     description: "Learn about STEM for free with learnzac.",
     link: "https://learnzac.onrender.com",
-    image: "/placeholder.svg",
+    image: "https://via.placeholder.com/400x200.png?text=Learnzac",
   },
   {
     title: "Emn-hub",
     description: "Get whatever you need in one app.",
     link: "https://emn-hub.onrender.com",
-    image: "/placeholder.svg",
+    image: "https://via.placeholder.com/400x200.png?text=Emn-hub",
   },
   {
     title: "Image Editor",
     description: "Edit your photos with powerful tools and stunning filters.",
     link: "https://emn.render.com/3",
-    image: "/placeholder.svg",
+    image: "https://via.placeholder.com/400x200.png?text=Image+Editor",
   },
   {
     title: "Task Manager",
     description: "Organize your tasks and boost your productivity with our smart manager.",
     link: "https://emn.render.com/4",
-    image: "/placeholder.svg",
+    image: "https://via.placeholder.com/400x200.png?text=Task+Manager",
   },
 ];
 
@@ -76,7 +76,7 @@ const ProjectShowcase: React.FC = () => {
   return (
     <section className="py-12 bg-secondary text-foreground">
       <div className="container mx-auto px-4 md:px-8">
-        <h3 className="text-3xl font-bold text-center mb-8">More Projects by Dyad</h3>
+        <h3 className="text-3xl font-bold text-center mb-8">More Projects by Emtra</h3>
         <div className="relative">
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex -ml-4">
